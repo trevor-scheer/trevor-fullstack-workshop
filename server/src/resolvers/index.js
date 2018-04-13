@@ -1,9 +1,11 @@
-import queryResolvers from './query';
-import movieResolvers from './movie';
-import castResolvers from './cast';
+import query from './query';
+import movie from './movie';
+import cast from './cast';
+import mutation from './mutation';
 
 export default {
-  ...queryResolvers,
-  ...movieResolvers,
-  ...castResolvers,
+  ...query,
+  ...movie,
+  ...cast,
+  ...mutation,
 };
