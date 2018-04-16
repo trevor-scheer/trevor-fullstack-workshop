@@ -6,6 +6,7 @@ type Query {
 
 type Mutation {
   toggleLike(id: ID!): Movie
+  authorize(email: String!): String
 }
 
 enum SORT_TYPE {

@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import axios from 'axios';
+import isEmail from 'isemail';
 
 import typeDefs from './schema.graphql';
 import resolvers from './resolvers';
@@ -32,16 +33,30 @@ const PORT = 3000;
 
 const app = express();
 
+app.use((req, res, next) => {
+  if (!req.headers.authorization) return next();
+
+  const auth = req.headers.authorization || '';
+  const email = new Buffer(auth, 'base64').toString('ascii');
+
+  if (isEmail.validate(email)) {
+    req.user = email;
+  }
+
+  return next();
+});
+
 // bodyParser is needed just for POST.
 app.use(
   '/graphql',
   bodyParser.json(),
-  graphqlExpress({
+  graphqlExpress(req => ({
     schema: myGraphQLSchema,
     context: {
       models,
+      user: req.user || null,
     },
-  }),
+  })),
 );
 app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' })); // if you want GraphiQL enabled
 
