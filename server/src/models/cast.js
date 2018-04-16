@@ -1,11 +1,10 @@
-export default ({ config, axios }) => ({
+export default ({ config, fetch, utils }) => ({
   async getCastByMovie(id) {
-    const url = `${config.url}/movie/${id}/credits`;
+    const paramString = utils.paramsObjectToURLString(config.params);
+    const url = `${config.url}/movie/${id}/credits${paramString}`;
 
-    const res = await axios(url, {
-      params: config.params,
-    });
-
-    return res && res.data && res.data.cast ? res.data.cast : [];
+    return fetch(url)
+      .then(res => res.json())
+      .then(json => json.cast || []);
   },
 });

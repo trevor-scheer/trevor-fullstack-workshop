@@ -2,17 +2,12 @@ const PAGE_SIZE = 20;
 
 const likes = new Set();
 
-export default ({ config, axios }) => ({
+export default ({ config, fetch, utils }) => ({
   async getMovieById(id) {
-    const url = `${config.url}/movie/${id}`;
+    const paramString = utils.paramsObjectToURLString(config.params);
+    const url = `${config.url}/movie/${id}${paramString}`;
 
-    const res = await axios(url, {
-      params: config.params,
-    });
-
-    return res && res.data
-      ? { ...res.data, isLiked: await this.isMovieLiked(id) }
-      : null;
+    return fetch(url).then(res => res.json());
   },
 
   async getMovies({ sort, year, page }) {
@@ -20,13 +15,17 @@ export default ({ config, axios }) => ({
     if (sortParam === 'POPULARITY') sortParam = 'popularity.desc';
     else if (sortParam === 'RELEASE_DATE') sortParam = 'release_date.desc';
 
-    const res = await axios(`${config.url}/discover/movie`, {
-      params: { ...config.params, year, sort_by: sortParam, page },
+    const paramString = utils.paramsObjectToURLString({
+      ...config.params,
+      year,
+      sort_by: sortParam,
+      page,
     });
+    const url = `${config.url}/discover/movie${paramString}`;
 
-    return res && res.data && res.data.results
-      ? res.data.results.map(m => ({ ...m, isLiked: this.isMovieLiked(m.id) }))
-      : [];
+    return fetch(url)
+      .then(res => res.json())
+      .then(json => json.results || []);
   },
 
   // leaving this async, because it'd likely be a DB lookup/API call

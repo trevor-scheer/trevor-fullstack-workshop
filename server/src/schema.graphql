@@ -1,5 +1,5 @@
 type Query {
-  movie(id: Int): Movie
+  movie(id: ID): Movie
   movies(sort: SORT_TYPE, year: Int, page: Int): [Movie]!
   likes: [Movie]
 }

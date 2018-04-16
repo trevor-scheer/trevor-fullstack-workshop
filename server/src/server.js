@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
-import axios from 'axios';
+import fetch from 'node-fetch';
 import isEmail from 'isemail';
 
 import typeDefs from './schema.graphql';
@@ -10,6 +10,8 @@ import resolvers from './resolvers';
 
 import movieModel from './models/movie';
 import castModel from './models/cast';
+
+import * as utils from './utils';
 
 const config = {
   url: 'https://api.themoviedb.org/3',
@@ -20,8 +22,8 @@ const config = {
 };
 
 const models = {
-  movie: movieModel({ config, axios }),
-  cast: castModel({ config, axios }),
+  movie: movieModel({ config, fetch, utils }),
+  cast: castModel({ config, fetch, utils }),
 };
 
 const myGraphQLSchema = makeExecutableSchema({
