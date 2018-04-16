@@ -5,6 +5,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import fetch from 'node-fetch';
 import isEmail from 'isemail';
 
+// transpiled to plaintext with babel-plugin-inline-import
 import typeDefs from './schema.graphql';
 import resolvers from './resolvers';
 
@@ -13,7 +14,9 @@ import castModel from './models/cast';
 
 import * as utils from './utils';
 
+// global config options
 const config = {
+  port: 3000,
   url: 'https://api.themoviedb.org/3',
   params: {
     api_key: '4e911a064e43b9cd6fbb3137c572d89a',
@@ -21,6 +24,7 @@ const config = {
   },
 };
 
+// initialize data models and pass dependencies
 const models = {
   movie: movieModel({ config, fetch, utils }),
   cast: castModel({ config, fetch, utils }),
@@ -31,10 +35,10 @@ const myGraphQLSchema = makeExecutableSchema({
   resolvers,
 });
 
-const PORT = 3000;
-
 const app = express();
 
+// middleware for auth. Checks for an `authorization` header, and makes sure
+// it translates to a valid email. If so, it adds a `user` to the request object
 app.use((req, res, next) => {
   if (!req.headers.authorization) return next();
 
@@ -56,10 +60,10 @@ app.use(
     schema: myGraphQLSchema,
     context: {
       models,
-      user: req.user || null,
+      user: req.user || null, // adds the user's email to the context
     },
   })),
 );
 app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' })); // if you want GraphiQL enabled
 
-app.listen(PORT);
+app.listen(config.port);

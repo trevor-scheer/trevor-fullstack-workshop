@@ -1,8 +1,6 @@
 export default {
   Query: {
-    movie: (root, { id }, { models }) => {
-      return models.movie.getMovieById(id);
-    },
+    movie: (root, { id }, { models }) => models.movie.getMovieById(id),
     movies: (root, { sort, year, page = 1 }, { models }) => {
       // API restriction
       if (page > 1000)
