@@ -7,5 +7,9 @@ export default {
     genres: ({ genres }) => (genres ? genres.map(g => g.name) : []),
     releaseDate: ({ release_date }) => release_date,
     cast: ({ id }, _, { models }) => models.cast.getCastByMovie(id),
+    isLiked: ({ id }, _, { models, user }) => {
+      if (!user) return false;
+      return models.movie.isMovieLiked({ user, id });
+    },
   },
 };

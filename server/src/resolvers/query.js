@@ -7,9 +7,9 @@ export default {
         throw new Error('Page must be less than or equal to 1000');
       return models.movie.getMovies({ sort, year, page });
     },
-    likes: async (root, args, { models }) => {
-      const likes = await models.movie.getMovieLikes();
-      return likes.map(id => models.movie.getMovieById(id));
+    likes: async (root, args, { models, user }) => {
+      const likes = await models.movie.getMovieLikes({ user });
+      return likes.map(({ movie }) => models.movie.getMovieById(movie));
     },
   },
 };

@@ -9,6 +9,8 @@ import isEmail from 'isemail';
 import typeDefs from './schema.graphql';
 import resolvers from './resolvers';
 
+import store from './store';
+
 import movieModel from './models/movie';
 import castModel from './models/cast';
 
@@ -26,7 +28,7 @@ const config = {
 
 // initialize data models and pass dependencies
 const models = {
-  movie: movieModel({ config, fetch, utils }),
+  movie: movieModel({ config, fetch, utils, store }),
   cast: castModel({ config, fetch, utils }),
 };
 

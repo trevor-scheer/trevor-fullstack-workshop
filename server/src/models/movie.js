@@ -1,8 +1,6 @@
 const PAGE_SIZE = 20;
 
-const likes = new Set();
-
-export default ({ config, fetch, utils }) => ({
+export default ({ config, fetch, utils, store }) => ({
   async getMovieById(id) {
     const paramString = utils.paramsObjectToURLString(config.params);
     const url = `${config.url}/movie/${id}${paramString}`;
@@ -17,9 +15,9 @@ export default ({ config, fetch, utils }) => ({
 
     const paramString = utils.paramsObjectToURLString({
       ...config.params,
-      year,
-      sort_by: sortParam,
-      page,
+      ...(year ? { year } : {}),
+      ...(page ? { page } : {}),
+      ...(sortParam ? { sort_by: sortParam } : {}),
     });
     const url = `${config.url}/discover/movie${paramString}`;
 
@@ -28,21 +26,23 @@ export default ({ config, fetch, utils }) => ({
       .then(json => json.results || []);
   },
 
-  // leaving this async, because it'd likely be a DB lookup/API call
-  async getMovieLikes() {
-    let likesKeys = [];
-    for (let item of likes.keys()) likesKeys.push(item);
-    return likesKeys;
+  async getMovieLikes({ user }) {
+    return await store.likes.findAll({ where: { user } });
   },
 
-  // leaving this async, because it'd likely be a DB lookup/API call
-  async toggleMovieLike(id) {
-    if (likes.has(id)) likes.delete(id);
-    else likes.add(id);
+  async toggleMovieLike({ id, user }) {
+    const like = await store.likes.find({
+      where: {
+        user,
+      },
+    });
+
+    if (!like) await store.likes.create({ user, movie: id });
+    else await store.likes.destroy({ where: { user, movie: id } });
   },
 
-  // leaving this async, because it'd likely be a DB lookup/API call
-  async isMovieLiked(id) {
-    return likes.has(`${id}`);
+  async isMovieLiked({ id, user }) {
+    const like = await store.likes.find({ where: { user, movie: id } });
+    return !!like;
   },
 });
