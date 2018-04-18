@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   Cast: {
     photo: ({ profile_path }, { size = 500 }) =>
       `https://image.tmdb.org/t/p/w${size}${profile_path}`,

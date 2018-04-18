@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   Movie: {
     score: ({ vote_average }) => vote_average,
     voteCount: ({ vote_count }) => vote_count,

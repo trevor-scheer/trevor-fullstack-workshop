@@ -1,0 +1,16 @@
+{
+  "name": "graphql-server-workshop",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "apollo-server": "2.0.0-alpha.2",
+    "apollo-engine": "latest",
+    "graphql": "^0.13.2",
+    "isemail": "^3.1.2",
+    "node-fetch": "^2.1.2",
+    "sequelize": "^4.37.6",
+    "sqlite3": "^4.0.0"
+  }
+}

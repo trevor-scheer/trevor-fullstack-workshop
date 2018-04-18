@@ -1,6 +1,6 @@
 const PAGE_SIZE = 20;
 
-export default ({ config, fetch, utils, store }) => ({
+module.exports = ({ config, fetch, utils, store }) => ({
   async getMovieById(id) {
     const paramString = utils.paramsObjectToURLString(config.params);
     const url = `${config.url}/movie/${id}${paramString}`;

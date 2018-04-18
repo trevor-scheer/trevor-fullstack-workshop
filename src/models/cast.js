@@ -1,4 +1,4 @@
-export default ({ config, fetch, utils }) => ({
+module.exports = ({ config, fetch, utils }) => ({
   async getCastByMovie(id) {
     const paramString = utils.paramsObjectToURLString(config.params);
     const url = `${config.url}/movie/${id}/credits${paramString}`;

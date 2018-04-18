@@ -1,4 +1,4 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('database', 'username', 'password', {
   dialect: 'sqlite',
@@ -19,4 +19,4 @@ const likes = sequelize.define('like', {
   movie: Sequelize.STRING,
 });
 
-export default { likes };
+module.exports = { likes };

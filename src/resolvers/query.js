@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   Query: {
     movie: (root, { id }, { models }) => models.movie.getMovieById(id),
     movies: (root, { sort, year, page = 1 }, { models }) => {
