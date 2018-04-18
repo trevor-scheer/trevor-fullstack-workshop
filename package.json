@@ -5,8 +5,9 @@
     "start": "node src/server.js"
   },
   "dependencies": {
-    "apollo-server": "2.0.0-alpha.2",
     "apollo-engine": "latest",
+    "apollo-server": "2.0.0-alpha.2",
+    "dataloader": "^1.4.0",
     "graphql": "^0.13.2",
     "isemail": "^3.1.2",
     "node-fetch": "^2.1.2",

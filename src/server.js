@@ -4,8 +4,9 @@ const isEmail = require('isemail');
 
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
-
+const makeLoaders = require('./loaders');
 const store = require('./store');
+
 const movieModel = require('./models/movie');
 const castModel = require('./models/cast');
 
@@ -23,8 +24,8 @@ const config = {
 
 // initialize data models and pass dependencies
 const models = {
-  movie: movieModel({ config, fetch, utils, store }),
-  cast: castModel({ config, fetch, utils }),
+  movie: movieModel({ config, utils, store, loaders: makeLoaders() }),
+  cast: castModel({ config, utils, loaders: makeLoaders() }),
 };
 
 const server = new ApolloServer({

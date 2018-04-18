@@ -1,11 +1,11 @@
 const PAGE_SIZE = 20;
 
-module.exports = ({ config, fetch, utils, store }) => ({
+module.exports = ({ config, utils, store, loaders }) => ({
   async getMovieById(id) {
     const paramString = utils.paramsObjectToURLString(config.params);
     const url = `${config.url}/movie/${id}${paramString}`;
 
-    return fetch(url).then(res => res.json());
+    return loaders.fetch.load(url);
   },
 
   async getMovies({ sort, year, page }) {
@@ -21,9 +21,7 @@ module.exports = ({ config, fetch, utils, store }) => ({
     });
     const url = `${config.url}/discover/movie${paramString}`;
 
-    return fetch(url)
-      .then(res => res.json())
-      .then(json => json.results || []);
+    return loaders.fetch.load(url).then(json => json.results || []);
   },
 
   async getMovieLikes({ user }) {
