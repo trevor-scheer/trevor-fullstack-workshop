@@ -22,12 +22,17 @@ Welcome to the server portion of the workshop! For the morning session, we will 
 
 2. On the left hand menu in Glitch, click Logs > Console
 
-3. Run this command:
+3. Confirm you're tracking origin by running `git remote -v`. If you are, then you can skip step #4 and go to step #5
+
+4. If you are not tracking origin, run this command:
 
 ```bash
 git remote add origin https://github.com/apollographql/fullstack-workshop-server && git fetch origin && git checkout 00-start && refresh
 ```
-4. Navigate to `server.js`. You should not see any `ApolloServer` setup code. If that's the case, then you're good to go!
+
+5. If you are tracking origin, run this command: `git fetch origin && git checkout 00-start && refresh`
+
+6. Navigate to `server.js`. You should not see any `ApolloServer` setup code. If that's the case, then you're good to go!
 
 ### Branches
 - `00-start`: Your starting point
