@@ -47,7 +47,7 @@ module.exports = `
     RELEASE_DATE
   }
 
-  type Movie @cacheControl(maxAge: 600) {
+  type Movie {
     id: ID
     title: String
     overview: String
