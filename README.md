@@ -13,6 +13,22 @@ Welcome to the server portion of the workshop! For the morning session, we will 
 
 ## Running on Glitch
 
+<!-- Remix Button -->
+<a href="https://glitch.com/edit/#!/remix/fullstack-workshop-server">
+  <img src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fremix%402x.png?1513093958726" alt="remix button" aria-label="remix" height="33">
+</a>
+
+1. Click this button to remix the project
+
+2. On the left hand menu in Glitch, click Logs > Console
+
+3. Run this command:
+
+```bash
+git remote add origin https://github.com/apollographql/fullstack-workshop-server && git fetch origin && git checkout 00-start && refresh
+```
+4. Navigate to `server.js`. You should not see any `ApolloServer` setup code. If that's the case, then you're good to go!
+
 ### Branches
 - `00-start`: Your starting point
 - `01-apollo-server`: Setting up Apollo Server and Apollo Engine
