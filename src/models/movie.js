@@ -1,3 +1,8 @@
+/*
+TODO: Refactor getMovies and getMovieById to use DataLoader
+Check out models/cast for an example!
+*/
+
 const PAGE_SIZE = 20;
 
 module.exports = ({ config, utils, store, loaders }) => ({

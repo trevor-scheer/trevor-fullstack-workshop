@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { ApolloServer } = require('apollo-server');
 const fetch = require('node-fetch');
 const isEmail = require('isemail');
@@ -6,13 +8,12 @@ const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 const makeLoaders = require('./loaders');
 const store = require('./store');
+const utils = require('./utils');
 
 const movieModel = require('./models/movie');
 const castModel = require('./models/cast');
 
-const utils = require('./utils');
-
-// global config options
+// Global config options for the Movie DB
 const config = {
   port: 3000,
   url: 'https://api.themoviedb.org/3',
@@ -22,12 +23,13 @@ const config = {
   },
 };
 
-// initialize data models and pass dependencies
+// Initialize data models and pass dependencies
 const models = {
   movie: movieModel({ config, utils, store, loaders: makeLoaders() }),
   cast: castModel({ config, utils, loaders: makeLoaders() }),
 };
 
+// Set up Apollo Server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -38,9 +40,10 @@ const server = new ApolloServer({
 
     return { models, user: isEmail.validate(email) ? email : null };
   },
-  engine: false,
+  engine: true,
 });
 
+// Start our server with our port config
 server
   .listen({ port: config.port })
   .then(({ url }) => console.log(`🚀 app running at ${url}`));
