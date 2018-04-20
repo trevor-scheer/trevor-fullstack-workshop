@@ -8,14 +8,13 @@ module.exports = ({ config, utils, store, loaders }) => ({
     return loaders.fetch.load(url);
   },
 
-  async getMovies({ sort, year, page }) {
+  async getMovies({ sort, page }) {
     let sortParam = null;
-    if (sortParam === 'POPULARITY') sortParam = 'popularity.desc';
-    else if (sortParam === 'RELEASE_DATE') sortParam = 'release_date.desc';
+    if (sort === 'POPULARITY') sortParam = 'popularity.desc';
+    else if (sort === 'RELEASE_DATE') sortParam = 'release_date.desc';
 
     const paramString = utils.paramsObjectToURLString({
       ...config.params,
-      ...(year ? { year } : {}),
       ...(page ? { page } : {}),
       ...(sortParam ? { sort_by: sortParam } : {}),
     });
@@ -32,6 +31,7 @@ module.exports = ({ config, utils, store, loaders }) => ({
     const like = await store.likes.find({
       where: {
         user,
+        movie: id,
       },
     });
 

@@ -1,13 +1,13 @@
 module.exports = `
   type Query {
     movie(id: ID): Movie
-    movies(sort: SORT_TYPE, year: Int, page: Int): [Movie]!
+    movies(sort: SORT_TYPE, page: Int): [Movie]!
     likes: [Movie]
   }
 
   type Mutation {
     toggleLike(id: ID!): Movie
-    authorize(email: String!): String
+    login(email: String!): String
   }
 
   enum SORT_TYPE {

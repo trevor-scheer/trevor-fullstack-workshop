@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('database', 'username', 'password', {
   dialect: 'sqlite',
+  logging: false,
 });
 
 const CREATE_LIKES_QUERY = `CREATE TABLE likes(

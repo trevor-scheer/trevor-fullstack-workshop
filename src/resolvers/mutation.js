@@ -5,7 +5,6 @@ module.exports = {
       await models.movie.toggleMovieLike({ id, user });
       return models.movie.getMovieById(id);
     },
-    authorize: (_, { email }, { models, user }) =>
-      new Buffer(email).toString('base64'),
+    login: (_, { email }) => new Buffer(email).toString('base64'),
   },
 };
