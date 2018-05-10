@@ -45,7 +45,7 @@ const server = new ApolloServer({
       fetch
     };
   },
-  engine: false
+  engine: true
 });
 
 // Start our server with our port config
