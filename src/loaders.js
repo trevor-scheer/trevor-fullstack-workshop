@@ -1,15 +1,18 @@
 const DataLoader = require('dataloader');
-const fetch = require('node-fetch');
 
-module.exports = function makeLoaders() {
+module.exports = function makeLoaders(fetch) {
   return {
-    fetch: new DataLoader(queries => {
-      return Promise.all(
-        queries.map(url => {
-          console.log('GET', url);
-          return fetch(url).then(res => res.json());
-        }),
-      );
-    }),
+    fetch: new DataLoader(
+      queries => {
+        return Promise.all(
+          queries.map(([url, config]) => {
+            return fetch(url, config).then(res => res.json());
+          }),
+        );
+      },
+      {
+        cacheKeyFn: JSON.stringify,
+      },
+    ),
   };
 };
