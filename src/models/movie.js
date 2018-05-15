@@ -7,7 +7,10 @@ const PAGE_SIZE = 20;
 
 module.exports = ({ config, utils, store, loaders }) => ({
   async getMovieById(id) {
-    return loaders.fetch.load([`/movie/${id}`]);
+    const paramString = utils.paramsObjectToURLString(config.params);
+    const url = `${config.url}/movie/${id}${paramString}`;
+
+    return loaders.fetch.load(url);
   },
 
   async getMovies({ sort, page }) {
@@ -15,9 +18,14 @@ module.exports = ({ config, utils, store, loaders }) => ({
     if (sort === 'POPULARITY') sortParam = 'popularity.desc';
     else if (sort === 'RELEASE_DATE') sortParam = 'release_date.desc';
 
-    return loaders.fetch
-      .load(['/discover/movie', { params: { page, sort_by: sortParam } }])
-      .then(json => json.results || []);
+    const paramString = utils.paramsObjectToURLString({
+      ...config.params,
+      ...(page ? { page } : {}),
+      ...(sortParam ? { sort_by: sortParam } : {}),
+    });
+    const url = `${config.url}/discover/movie${paramString}`;
+
+    return loaders.fetch.load(url).then(json => json.results || []);
   },
 
   async getMovieLikes({ user }) {
@@ -28,8 +36,8 @@ module.exports = ({ config, utils, store, loaders }) => ({
     const like = await store.likes.find({
       where: {
         user,
-        movie: id
-      }
+        movie: id,
+      },
     });
 
     if (!like) await store.likes.create({ user, movie: id });
@@ -39,5 +47,5 @@ module.exports = ({ config, utils, store, loaders }) => ({
   async isMovieLiked({ id, user }) {
     const like = await store.likes.find({ where: { user, movie: id } });
     return !!like;
-  }
+  },
 });
