@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const { ApolloServer } = require('apollo-server');
+const fetch = require('node-fetch');
 const isEmail = require('isemail');
 
 const typeDefs = require('./schema');
@@ -18,8 +19,14 @@ const config = {
   url: 'https://api.themoviedb.org/3',
   params: {
     api_key: '4e911a064e43b9cd6fbb3137c572d89a',
-    include_adult: false
-  }
+    include_adult: false,
+  },
+};
+
+// Initialize data models and pass dependencies
+const models = {
+  movie: movieModel({ config, utils, store, loaders: makeLoaders() }),
+  cast: castModel({ config, utils, loaders: makeLoaders() }),
 };
 
 // Set up Apollo Server
@@ -30,22 +37,10 @@ const server = new ApolloServer({
     // simple auth check on every request
     const auth = (req.headers && req.headers.authorization) || '';
     const email = new Buffer(auth, 'base64').toString('ascii');
-    const fetch = utils.makeFetch(config);
-    const loaders = makeLoaders(fetch);
 
-    // Initialize data models and pass dependencies
-    const models = {
-      movie: movieModel({ config, utils, store, loaders }),
-      cast: castModel({ config, utils, loaders })
-    };
-
-    return {
-      models,
-      user: isEmail.validate(email) ? email : null,
-      fetch
-    };
+    return { models, user: isEmail.validate(email) ? email : null };
   },
-  engine: true
+  engine: true,
 });
 
 // Start our server with our port config
