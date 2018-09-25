@@ -3,7 +3,7 @@
 Remember the resolver function signature:
 fieldName: (obj, args, context, info) => result;
 
-Check models/movie for the data fetching functions you'll need to complete the exercise.
+Check data-sources/movie for the data fetching functions you'll need to complete the exercise.
 Refer to your schema if you're unsure what to return from the resolvers.
 
 Here's an example API response to help you out:
@@ -34,16 +34,20 @@ Here's an example API response to help you out:
 
 module.exports = {
   Movie: {
-    score: ({ vote_average }) => vote_average,
+    score: ({ vote_average }) => {
+      console.log(vote_average);
+      return vote_average;
+    },
     voteCount: ({ vote_count }) => vote_count,
     poster: ({ poster_path }, { size = 500 }) =>
       poster_path && `https://image.tmdb.org/t/p/w${size}${poster_path}`,
     genres: ({ genres }) => (genres ? genres.map(g => g.name) : []),
     releaseDate: ({ release_date }) => release_date,
-    cast: ({ id }, _, { models }) => models.cast.getCastByMovie(id),
-    isLiked: ({ id }, _, { models, user }) => {
+    cast: ({ id }, _, { dataSources }) =>
+      dataSources.castAPI.getCastByMovie(id),
+    isLiked: ({ id }, _, { user, dataSources }) => {
       if (!user) return false;
-      return models.movie.isMovieLiked({ user, id });
+      return dataSources.moviesAPI.isMovieLiked({ user, id });
     },
   },
 };

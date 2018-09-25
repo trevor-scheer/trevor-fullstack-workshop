@@ -5,12 +5,10 @@ const isEmail = require('isemail');
 
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
-const makeLoaders = require('./loaders');
 const store = require('./store');
-const utils = require('./utils');
 
-const movieModel = require('./models/movie');
-const castModel = require('./models/cast');
+const MovieDataSource = require('./data-sources/movie');
+const CastDataSource = require('./data-sources/cast');
 
 // Global config options for the Movie DB
 const config = {
@@ -31,21 +29,25 @@ const server = new ApolloServer({
     const auth = (req.headers && req.headers.authorization) || '';
     const email = new Buffer(auth, 'base64').toString('ascii');
 
-    const fetch = utils.makeFetch(config);
-    const loaders = makeLoaders(fetch);
-
-    // Initialize data models and pass dependencies
-    const models = {
-      movie: movieModel({ config, utils, store, loaders }),
-      cast: castModel({ config, utils, loaders }),
-    };
-
-    return {
-      models,
-      user: isEmail.validate(email) ? email : null,
-      fetch,
-    };
+    return { user: isEmail.validate(email) ? email : null };
   },
+  dataSources: () => ({
+    moviesAPI: new MovieDataSource({
+      baseURL: config.url,
+      params: config.params,
+      store,
+    }),
+    castAPI: new CastDataSource({
+      baseURL: config.url,
+      params: config.params,
+    }),
+  }),
+  // TODO: remove this
+  engine: process.env.ENGINE_API_KEY
+    ? {
+        apiKey: process.env.ENGINE_API_KEY,
+      }
+    : undefined,
 });
 
 // Start our server with our port config
