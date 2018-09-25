@@ -34,10 +34,7 @@ Here's an example API response to help you out:
 
 module.exports = {
   Movie: {
-    score: ({ vote_average }) => {
-      console.log(vote_average);
-      return vote_average;
-    },
+    score: ({ vote_average }) => vote_average,
     voteCount: ({ vote_count }) => vote_count,
     poster: ({ poster_path }, { size = 500 }) =>
       poster_path && `https://image.tmdb.org/t/p/w${size}${poster_path}`,
