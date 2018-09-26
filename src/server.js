@@ -5,20 +5,8 @@ const isEmail = require('isemail');
 
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
-const store = require('./store');
-
 const MovieDataSource = require('./data-sources/movie');
-const CastDataSource = require('./data-sources/cast');
-
-// Global config options for the Movie DB
-const config = {
-  port: 3000,
-  url: 'https://api.themoviedb.org/3',
-  params: {
-    api_key: '4e911a064e43b9cd6fbb3137c572d89a',
-    include_adult: false,
-  },
-};
+const LikesDataSource = require('./data-sources/likes');
 
 // Set up Apollo Server
 const server = new ApolloServer({
@@ -32,25 +20,13 @@ const server = new ApolloServer({
     return { user: isEmail.validate(email) ? email : null };
   },
   dataSources: () => ({
-    moviesAPI: new MovieDataSource({
-      baseURL: config.url,
-      params: config.params,
-      store,
-    }),
-    castAPI: new CastDataSource({
-      baseURL: config.url,
-      params: config.params,
-    }),
+    moviesAPI: new MovieDataSource(),
+    likesAPI: new LikesDataSource(),
   }),
-  // TODO: remove this
-  engine: process.env.ENGINE_API_KEY
-    ? {
-        apiKey: process.env.ENGINE_API_KEY,
-      }
-    : undefined,
+  engine: { apiKey: process.env.ENGINE_API_KEY },
 });
 
-// Start our server with our port config
+// Start our server
 server
-  .listen({ port: config.port })
+  .listen({ port: 3000 })
   .then(({ url }) => console.log(`🚀 app running at ${url}`));

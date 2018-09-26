@@ -19,7 +19,7 @@ module.exports = {
       return dataSources.moviesAPI.getMovies({ sort, page });
     },
     likes: async (root, args, { user, dataSources }) => {
-      const likes = await dataSources.moviesAPI.getMovieLikes({ user });
+      const likes = await dataSources.likesAPI.getMovieLikes({ user });
       return likes.map(({ movie }) =>
         dataSources.moviesAPI.getMovieById(movie),
       );

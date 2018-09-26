@@ -41,10 +41,10 @@ module.exports = {
     genres: ({ genres }) => (genres ? genres.map(g => g.name) : []),
     releaseDate: ({ release_date }) => release_date,
     cast: ({ id }, _, { dataSources }) =>
-      dataSources.castAPI.getCastByMovie(id),
+      dataSources.moviesAPI.getCastByMovie(id),
     isLiked: ({ id }, _, { user, dataSources }) => {
       if (!user) return false;
-      return dataSources.moviesAPI.isMovieLiked({ user, id });
+      return dataSources.likesAPI.isMovieLiked({ user, id });
     },
   },
 };

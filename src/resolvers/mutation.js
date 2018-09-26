@@ -16,7 +16,7 @@ module.exports = {
   Mutation: {
     toggleLike: async (root, { id }, { user, dataSources }) => {
       if (!user) throw new Error('You must be logged in to do this');
-      await dataSources.moviesAPI.toggleMovieLike({ id, user });
+      await dataSources.likesAPI.toggleMovieLike({ id, user });
       return dataSources.moviesAPI.getMovieById(id);
     },
     login: (_, { email }) => new Buffer(email).toString('base64'),

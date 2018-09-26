@@ -1,20 +1,21 @@
 const { RESTDataSource } = require('apollo-datasource-rest');
 
 class MoviesAPI extends RESTDataSource {
-  constructor({ baseURL, params, store }) {
+  constructor() {
     super();
-
-    this.params = params;
-    this.baseURL = baseURL;
-    this.pageSize = 20;
-    this.store = store; // sql store
+    this.baseURL = 'https://api.themoviedb.org/3';
   }
 
   // add api params to each request
+  // e.g. BASE_URL/movie/1/credits?api_key=4u859034&include_adult=false
   willSendRequest(request) {
-    Object.keys(this.params).map(key =>
-      request.params.set(key, this.params[key]),
-    );
+    request.params.set('api_key', '4e911a064e43b9cd6fbb3137c572d89a');
+    request.params.set('include_adult', false);
+  }
+
+  async getCastByMovie(id) {
+    const res = await this.get(`/movie/${id}/credits`);
+    return res ? res.cast : [];
   }
 
   async getMovieById(id) {
@@ -31,27 +32,6 @@ class MoviesAPI extends RESTDataSource {
     });
 
     return res ? res.results : [];
-  }
-
-  async getMovieLikes({ user }) {
-    return await this.store.likes.findAll({ where: { user } });
-  }
-
-  async toggleMovieLike({ id, user }) {
-    const like = await this.store.likes.find({
-      where: {
-        user,
-        movie: id,
-      },
-    });
-
-    if (!like) await this.store.likes.create({ user, movie: id });
-    else await this.store.likes.destroy({ where: { user, movie: id } });
-  }
-
-  async isMovieLiked({ id, user }) {
-    const like = await this.store.likes.find({ where: { user, movie: id } });
-    return !!like;
   }
 }
 
