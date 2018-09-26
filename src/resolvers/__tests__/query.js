@@ -52,6 +52,8 @@ describe('Query Resolvers', () => {
       dataSources: {
         moviesAPI: {
           getMovieById: jest.fn(() => mockMovie),
+        },
+        likesAPI: {
           getMovieLikes: jest.fn(() => [{ movie: 1 }]),
         },
       },
@@ -62,7 +64,7 @@ describe('Query Resolvers', () => {
 
     expect(res).toEqual([mockMovie]);
     expect(mockContext.dataSources.moviesAPI.getMovieById).toBeCalledWith(1);
-    expect(mockContext.dataSources.moviesAPI.getMovieLikes).toBeCalledWith({
+    expect(mockContext.dataSources.likesAPI.getMovieLikes).toBeCalledWith({
       user: 1,
     });
   });

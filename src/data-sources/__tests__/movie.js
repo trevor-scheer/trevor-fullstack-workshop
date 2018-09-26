@@ -27,17 +27,23 @@ describe('MoviesAPI', () => {
     });
   });
 
-  it('[willSendRequest] calls params set on request', () => {
-    const request = { params: { set: jest.fn() } };
-    const res = moviesAPI.willSendRequest(request);
+  it('[getCastByMovie] returns empty array if null API response', async () => {
+    moviesAPI.get = jest.fn();
 
-    expect(request.params.set).toHaveBeenCalledTimes(2);
+    const res = await moviesAPI.getCastByMovie(1);
 
-    // called the first time with 'foo', 'bar'
-    expect(request.params.set).toHaveBeenNthCalledWith(1, 'foo', 'bar');
+    expect(moviesAPI.get).toBeCalledWith('/movie/1/credits');
+    expect(res).toEqual([]);
+  });
 
-    // called the second time with 'baz', 'daz'
-    expect(request.params.set).toHaveBeenNthCalledWith(2, 'baz', 'daz');
+  it('[getCastByMovie] returns cast if in API response', async () => {
+    const cast = [1, 2];
+    moviesAPI.get = jest.fn(() => ({ cast }));
+
+    const res = await moviesAPI.getCastByMovie(1);
+
+    expect(moviesAPI.get).toBeCalledWith('/movie/1/credits');
+    expect(res).toEqual(cast);
   });
 
   it('[getMovieById] returns raw response from get', async () => {
@@ -81,40 +87,5 @@ describe('MoviesAPI', () => {
     const res = await moviesAPI.getMovies({});
 
     expect(res).toEqual([]);
-  });
-
-  it('[getMovieLikes] calls store method and returns results', async () => {
-    const mockLikes = [{ id: 1, user: 1 }];
-    moviesAPI.store.likes.findAll.mockReturnValueOnce(mockLikes);
-    const res = await moviesAPI.getMovieLikes({ user: 1 });
-
-    expect(moviesAPI.store.likes.findAll).toBeCalledWith({
-      where: { user: 1 },
-    });
-    expect(res).toEqual(mockLikes);
-  });
-
-  it('[toggleMovieLikes] creates or destroys likes, based on current', async () => {
-    // mock the return of the find ONCE, and expect destroy to be called to remove it
-    const mockLikes = [{ id: 1, user: 1 }];
-    moviesAPI.store.likes.find.mockReturnValueOnce(mockLikes);
-    await moviesAPI.toggleMovieLike({ user: 1, movie: 1 });
-    expect(moviesAPI.store.likes.destroy).toBeCalled();
-
-    // no likes found -- should create one
-    await moviesAPI.toggleMovieLike({ user: 1, movie: 1 });
-    expect(moviesAPI.store.likes.create).toBeCalled();
-  });
-
-  it('[isMovieLiked] finds like if present', async () => {
-    // mock the return of the find ONCE. expect return to be true -- is liked
-    const mockLikes = [{ id: 1, user: 1 }];
-    moviesAPI.store.likes.find.mockReturnValueOnce(mockLikes);
-    const resTrue = await moviesAPI.isMovieLiked({ user: 1, movie: 1 });
-    expect(resTrue).toBeTruthy();
-
-    // no likes found -- should be false
-    const resFalse = await moviesAPI.isMovieLiked({ user: 1, movie: 1 });
-    expect(resFalse).toBeFalsy();
   });
 });

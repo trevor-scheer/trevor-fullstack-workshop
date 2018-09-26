@@ -24,8 +24,10 @@ describe('Mutation Resolvers', () => {
   it('[toggleLike] calls toggleLike and returns movie', async () => {
     const mockContext = {
       dataSources: {
-        moviesAPI: {
+        likesAPI: {
           toggleMovieLike: jest.fn(),
+        },
+        moviesAPI: {
           getMovieById: jest.fn(() => ({ title: 'wow' })),
         },
       },
@@ -38,7 +40,7 @@ describe('Mutation Resolvers', () => {
       mockContext,
     );
 
-    expect(mockContext.dataSources.moviesAPI.toggleMovieLike).toBeCalledWith({
+    expect(mockContext.dataSources.likesAPI.toggleMovieLike).toBeCalledWith({
       id: 1,
       user: 1,
     });

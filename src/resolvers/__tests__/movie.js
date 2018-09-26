@@ -44,11 +44,11 @@ describe('Movie Resolvers', () => {
   // we need to mock the underlying models that get passed in the context
   it('[cast] looks up cast and returns', () => {
     const mockContext = {
-      dataSources: { castAPI: { getCastByMovie: jest.fn(() => 'cast') } },
+      dataSources: { moviesAPI: { getCastByMovie: jest.fn(() => 'cast') } },
     };
     const res = resolvers.Movie.cast({ id: 1 }, null, mockContext);
     expect(res).toEqual('cast');
-    expect(mockContext.dataSources.castAPI.getCastByMovie).toBeCalledWith(1);
+    expect(mockContext.dataSources.moviesAPI.getCastByMovie).toBeCalledWith(1);
   });
 
   // we need to mock the underlying models that get passed in the context
@@ -59,13 +59,13 @@ describe('Movie Resolvers', () => {
 
   it('[isLiked] looks up if movie is liked', () => {
     const mockContext = {
-      dataSources: { moviesAPI: { isMovieLiked: jest.fn(() => true) } },
+      dataSources: { likesAPI: { isMovieLiked: jest.fn(() => true) } },
       user: { id: 1 },
     };
     const res = resolvers.Movie.isLiked({ id: 1 }, null, mockContext);
 
     expect(res).toBeTruthy();
-    expect(mockContext.dataSources.moviesAPI.isMovieLiked).toBeCalledWith({
+    expect(mockContext.dataSources.likesAPI.isMovieLiked).toBeCalledWith({
       user: { id: 1 },
       id: 1,
     });
