@@ -33,6 +33,7 @@ const createStore = () => {
     dialect: 'sqlite',
     logging: false,
     storage: './.store.sqlite',
+    operatorsAliases: false,
   });
 
   const CREATE_LIKES_QUERY = `CREATE TABLE IF NOT EXISTS likes(
