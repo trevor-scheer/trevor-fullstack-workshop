@@ -14,17 +14,7 @@ describe('MoviesAPI', () => {
   let moviesAPI;
 
   beforeEach(() => {
-    moviesAPI = new MoviesAPI({
-      params: { foo: 'bar', baz: 'daz' },
-      store: {
-        likes: {
-          findAll: jest.fn(),
-          find: jest.fn(),
-          create: jest.fn(),
-          destroy: jest.fn(),
-        },
-      },
-    });
+    moviesAPI = new MoviesAPI();
   });
 
   it('[getCastByMovie] returns empty array if null API response', async () => {
