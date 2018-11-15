@@ -29,45 +29,45 @@ Part 2: Fill in some queries and mutations.
 - Write a toggleLike mutation to toggle if a movie is liked
 - Write a likes query that fetches all the liked movies
 */
+const gql = require('graphql-tag');
 
-module.exports = `
-  type Query {
-    movie(id: ID): Movie
-    movies(sort: SORT_TYPE, page: Int): [Movie]!
-    likes: [Movie]
-  }
+// module.exports = gql`
+//   type Query {
+//     movie(id: ID): Movie
+//     movies(sort: SORT_TYPE, page: Int): [Movie]!
+//     likes: [Movie]
+//   }
 
-  type Mutation {
-    toggleLike(id: ID!): Movie
-    login(email: String!): String
-  }
+//   type Mutation {
+//     toggleLike(id: ID!): Movie
+//     login(email: String!): String
+//   }
 
-  enum SORT_TYPE {
-    POPULARITY
-    RELEASE_DATE
-  }
+//   enum SORT_TYPE {
+//     POPULARITY
+//     RELEASE_DATE
+//   }
 
-  type Movie {
-    id: ID
-    title: String
-    overview: String
-    score: Float
-    voteCount: Int
-    popularity: Float
-    poster(size: Int): String
-    genres: [String]!
-    releaseDate: String
-    cast: [Cast]!
-    isLiked: Boolean
-    runtime: Int
-  }
+//   type Movie {
+//     id: ID
+//     title: String
+//     overview: String
+//     score: Float
+//     voteCount: Int
+//     popularity: Float
+//     poster(size: Int): String
+//     genres: [String]!
+//     releaseDate: String
+//     cast: [Cast]!
+//     isLiked: Boolean
+//     runtime: Int
+//   }
 
-
-  type Cast @cacheControl(maxAge: 600) {
-    id: ID
-    name: String!
-    photo(size: Int): String
-    gender: String
-    character: String
-  }
-`;
+//   type Cast @cacheControl(maxAge: 600) {
+//     id: ID
+//     name: String!
+//     photo(size: Int): String
+//     gender: String
+//     character: String
+//   }
+// `;
